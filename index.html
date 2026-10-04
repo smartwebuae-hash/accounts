@@ -12,6 +12,7 @@
   --sale:#1f7a4d; --sale-bg:#e5f3ec;
   --purchase:#9a5b13; --purchase-bg:#fbefdf;
   --expense:#b3261e; --expense-bg:#fbe7e5;
+  --slaughter:#0f6c7a; --slaughter-bg:#e2f2f4;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:#eef3f7;color:var(--ink);font-size:16px;line-height:1.5}
@@ -26,7 +27,7 @@ h1{font-size:1.45rem;margin:0}
 
 /* الملخص */
 .totals{background:var(--ink);color:#fff;border-radius:12px;overflow:hidden;margin-bottom:16px}
-.totals .three{display:grid;grid-template-columns:repeat(3,1fr)}
+.totals .three{display:grid;grid-template-columns:repeat(4,1fr)}
 .totals .three div{padding:12px 8px;text-align:center}
 .totals .three div+div{border-right:1px solid rgba(255,255,255,.15)}
 .totals span{display:block;font-size:.78rem;opacity:.75}
@@ -39,11 +40,12 @@ h1{font-size:1.45rem;margin:0}
 /* النموذج */
 form{background:#fff;border:1px solid var(--rule);border-radius:12px;padding:14px;margin-bottom:16px}
 form h2{font-size:1rem;margin:0 0 10px}
-.kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.kinds{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
 .kinds button{padding:10px 4px;border-radius:8px;border:1.5px solid var(--rule);background:#fff;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
 .kinds button[aria-pressed=true][data-k=sale]{border-color:var(--sale);background:var(--sale-bg);color:var(--sale)}
 .kinds button[aria-pressed=true][data-k=purchase]{border-color:var(--purchase);background:var(--purchase-bg);color:var(--purchase)}
 .kinds button[aria-pressed=true][data-k=expense]{border-color:var(--expense);background:var(--expense-bg);color:var(--expense)}
+.kinds button[aria-pressed=true][data-k=slaughter]{border-color:var(--slaughter);background:var(--slaughter-bg);color:var(--slaughter)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 label{font-size:.85rem;color:var(--muted);display:block}
 input,textarea,select{width:100%;margin-top:4px;padding:10px;border:1px solid var(--rule);border-radius:8px;font:inherit;color:var(--ink);background:#fff}
@@ -65,6 +67,18 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
 .btn.del{background:#fff;color:var(--expense);border:1px solid #efc4c0;flex:0 0 auto;padding:12px 16px}
 .btn.wa{background:#1f8f55}
 
+/* الأصناف */
+.items{grid-column:1/-1;border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.items .ih,.items .ir{display:grid;grid-template-columns:1fr 64px 84px 84px 30px;gap:6px;align-items:center;padding:6px 8px}
+.items .ih{background:#f1f6fa;font-size:.76rem;color:var(--muted);font-weight:700}
+.items .ir{border-top:1px solid var(--rule)}
+.items .ir input{margin:0;padding:8px 6px;font-size:.9rem}
+.items .lt{direction:ltr;text-align:right;font-variant-numeric:tabular-nums;font-size:.88rem;font-weight:500}
+.items .x{width:28px;height:28px;border-radius:50%;border:1px solid var(--rule);background:#fff;color:var(--expense);cursor:pointer;font-size:15px;line-height:1}
+.items .addrow{display:block;width:100%;border:0;border-top:1px dashed var(--rule);background:#fff;padding:10px;font:inherit;font-size:.9rem;color:var(--ink);cursor:pointer;font-weight:500}
+.items .sum{display:flex;justify-content:space-between;padding:10px 12px;background:var(--ink);color:#fff;font-weight:700}
+input[readonly]{background:#f1f6fa}
+@media (max-width:520px){.items .ih,.items .ir{grid-template-columns:1fr 50px 66px 70px 28px;gap:4px;padding:6px}}
 /* التبويبات والدفتر */
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
 .tabs{display:flex;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:3px;gap:2px}
@@ -84,8 +98,9 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
 .tag.sale{background:var(--sale-bg);color:var(--sale)}
 .tag.purchase{background:var(--purchase-bg);color:var(--purchase)}
 .tag.expense{background:var(--expense-bg);color:var(--expense)}
+.tag.slaughter{background:var(--slaughter-bg);color:var(--slaughter)}
 .amt{font-weight:700;text-align:left}
-.amt.sale{color:var(--sale)}.amt.purchase{color:var(--purchase)}.amt.expense{color:var(--expense)}
+.amt.sale{color:var(--sale)}.amt.purchase{color:var(--purchase)}.amt.expense{color:var(--expense)}.amt.slaughter{color:var(--slaughter)}
 .empty{padding:28px 16px;text-align:center;color:var(--muted)}
 
 /* التحليل */
@@ -104,7 +119,7 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
 .viewer img{max-width:100%;max-height:100%;border-radius:6px}
 .viewer button{position:absolute;top:14px;left:14px;width:40px;height:40px;border-radius:50%;border:0;background:#fff;color:var(--ink);font-size:20px;cursor:pointer}
 .print-title{display:none;color:var(--muted);margin-bottom:8px}
-@media (max-width:520px){.breakdown{grid-template-columns:1fr}.totals b{font-size:.98rem}.totals .net b{font-size:1.45rem}.tabs button{padding:7px 9px}}
+@media (max-width:520px){.totals .three{grid-template-columns:repeat(2,1fr)}.totals .three div:nth-child(3){border-right:0}.totals .three div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.15)}.breakdown{grid-template-columns:1fr}.totals b{font-size:.98rem}.totals .net b{font-size:1.45rem}.tabs button{padding:7px 9px}}
 @media print{
   body{background:#fff} form,.month button,.foot,.banner,.toast,.viewer,.bar input{display:none!important}
   .print-title{display:block} .row{cursor:default;break-inside:avoid} .card{break-inside:avoid}
@@ -128,11 +143,12 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
   <section class="totals" aria-label="ملخص الشهر">
     <div class="three">
       <div><span>المبيعات</span><b class="n" id="tS">0.00</b></div>
+      <div><span>الذبائح</span><b class="n" id="tK">0.00</b></div>
       <div><span>المشتريات</span><b class="n" id="tP">0.00</b></div>
       <div><span>المصروفات</span><b class="n" id="tE">0.00</b></div>
     </div>
     <div class="net">
-      <span>صافي الربح (المبيعات − المشتريات − المصروفات)</span>
+      <span>صافي الربح (المبيعات + الذبائح − المشتريات − المصروفات)</span>
       <b class="n" id="tNet">0.00</b>
       <div class="vat" id="tVat"></div>
     </div>
@@ -144,12 +160,19 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
       <button type="button" data-k="sale" aria-pressed="true">مبيعات</button>
       <button type="button" data-k="purchase" aria-pressed="false">مشتريات</button>
       <button type="button" data-k="expense" aria-pressed="false">مصروفات</button>
+      <button type="button" data-k="slaughter" aria-pressed="false">ذبائح</button>
     </div>
     <div class="grid">
       <label>التاريخ<input type="date" id="date" required></label>
       <label>رقم الفاتورة<input type="text" id="ref" placeholder="اختياري"></label>
       <label><span id="partyLabel">العميل</span><input type="text" id="party" placeholder="اختياري"></label>
       <label>التصنيف<input type="text" id="cat" list="cats" placeholder="اختر أو اكتب"><datalist id="cats"></datalist></label>
+      <div class="items">
+        <div class="ih"><span>الصنف</span><span>الكمية</span><span>السعر</span><span>الإجمالي</span><span></span></div>
+        <div id="itemRows"></div>
+        <button type="button" class="addrow" id="addRow">+ إضافة صنف</button>
+        <div class="sum"><span>إجمالي الفاتورة</span><span class="num" id="itemsSum">0.00</span></div>
+      </div>
       <label>المبلغ (درهم)<input type="number" id="amount" step="0.01" min="0" inputmode="decimal" required></label>
       <label>طريقة الدفع
         <select id="pay"><option>كاش</option><option>بطاقة</option><option>تحويل بنكي</option><option>آجل</option></select>
@@ -175,6 +198,7 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
       <button role="tab" data-t="sale" aria-selected="false">مبيعات</button>
       <button role="tab" data-t="purchase" aria-selected="false">مشتريات</button>
       <button role="tab" data-t="expense" aria-selected="false">مصروفات</button>
+      <button role="tab" data-t="slaughter" aria-selected="false">ذبائح</button>
     </div>
     <input type="search" id="q" placeholder="بحث: مورد، تصنيف، رقم…">
   </div>
@@ -184,7 +208,10 @@ input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid v
     <div class="card"><h3>المشتريات حسب التصنيف</h3><div id="bP"></div></div>
     <div class="card"><h3>المصروفات حسب التصنيف</h3><div id="bE"></div></div>
     <div class="card"><h3>المبيعات حسب طريقة الدفع</h3><div id="bS"></div></div>
+    <div class="card"><h3>الذبائح حسب الزبون</h3><div id="bK"></div></div>
+    <div class="card"><h3>الذبائح حسب طريقة الدفع</h3><div id="bKp"></div></div>
     <div class="card"><h3>الآجل (غير مدفوع)</h3><div id="bC"></div></div>
+    <div class="card" style="grid-column:1/-1"><h3>الأصناف: الكمية والمبلغ</h3><div id="bI"></div></div>
   </div>
 
   <div class="foot">
@@ -204,9 +231,11 @@ const BUCKET = "cash-receipts";
 const KINDS = {
   sale:     {label:"مبيعات",  prefix:"S", party:"العميل",  cats:["مبيعات يومية","طلبات خارجية","تطبيقات توصيل","حفلات ومناسبات","أخرى"]},
   purchase: {label:"مشتريات", prefix:"P", party:"المورد",  cats:["لحوم","دجاج وأسماك","خضار وفواكه","مواد غذائية","مشروبات","غاز","تغليف ومستهلكات","أخرى"]},
-  expense:  {label:"مصروفات", prefix:"E", party:"الجهة",   cats:["رواتب","إيجار","كهرباء وماء","إنترنت واتصالات","صيانة","نقل وتوصيل","عمولات تطبيقات","تسويق","رسوم حكومية","أخرى"]}
+  expense:  {label:"مصروفات", prefix:"E", party:"الجهة",   cats:["رواتب","إيجار","كهرباء وماء","إنترنت واتصالات","صيانة","نقل وتوصيل","عمولات تطبيقات","تسويق","رسوم حكومية","أخرى"]},
+  slaughter:{label:"ذبائح",   prefix:"K", party:"اسم الزبون", cats:["غنم","ماعز","حاشي","عجل","نصف ذبيحة","أخرى"]}
 };
-const COLORS = {sale:"var(--sale)",purchase:"var(--purchase)",expense:"var(--expense)"};
+const isIncome = k => k==="sale"||k==="slaughter";
+const COLORS = {sale:"var(--sale)",purchase:"var(--purchase)",expense:"var(--expense)",slaughter:"var(--slaughter)"};
 const days = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 const months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
 
@@ -215,7 +244,7 @@ const fmt = n => Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,ma
 const esc = s => String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 
-let db=null, memory=[], entries=[], editingId=null, kind="sale", tab="all", photos=[], removed=[];
+let db=null, memory=[], entries=[], editingId=null, kind="sale", tab="all", photos=[], removed=[], items=[];
 const now=new Date(); let viewY=now.getFullYear(), viewM=now.getMonth();
 
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
@@ -241,9 +270,9 @@ async function load(){
 }
 
 function sums(list){
-  const t={sale:0,purchase:0,expense:0,vatOut:0,vatIn:0};
-  list.forEach(e=>{t[e.kind]+= +e.amount; if(e.kind==="sale") t.vatOut+= +e.vat||0; else t.vatIn+= +e.vat||0;});
-  t.net=t.sale-t.purchase-t.expense; return t;
+  const t={sale:0,slaughter:0,purchase:0,expense:0,vatOut:0,vatIn:0};
+  list.forEach(e=>{t[e.kind]+= +e.amount; if(isIncome(e.kind)) t.vatOut+= +e.vat||0; else t.vatIn+= +e.vat||0;});
+  t.net=t.sale+t.slaughter-t.purchase-t.expense; return t;
 }
 
 function bars(el,groups,color){
@@ -255,20 +284,21 @@ function render(){
   $("monthLabel").textContent=months[viewM]+" "+viewY;
   $("printTitle").textContent="تقرير الحسابات لشهر "+months[viewM]+" "+viewY;
   const t=sums(entries);
-  $("tS").textContent=fmt(t.sale); $("tP").textContent=fmt(t.purchase); $("tE").textContent=fmt(t.expense);
+  $("tS").textContent=fmt(t.sale); $("tK").textContent=fmt(t.slaughter); $("tP").textContent=fmt(t.purchase); $("tE").textContent=fmt(t.expense);
   $("tNet").textContent=(t.net>0?"+":"")+fmt(t.net); $("tNet").className="n "+(t.net<0?"neg":t.net>0?"pos":"");
   const vp=t.vatOut-t.vatIn;
   $("tVat").textContent=(t.vatOut||t.vatIn)?`الضريبة: محصّلة ${fmt(t.vatOut)} − مدفوعة ${fmt(t.vatIn)} = ${vp>=0?"مستحقة":"مستردة"} ${fmt(Math.abs(vp))}`:"";
 
   const q=$("q").value.trim().toLowerCase();
-  const list=entries.filter(e=>(tab==="all"||e.kind===tab)&&(!q||[e.party,e.category,e.ref_no,e.note,e.payment].join(" ").toLowerCase().includes(q)));
+  const list=entries.filter(e=>(tab==="all"||e.kind===tab)&&(!q||[e.party,e.category,e.ref_no,e.note,e.payment,...(e.items||[]).map(x=>x.name)].join(" ").toLowerCase().includes(q)));
   $("rows").innerHTML=list.length?list.map(e=>{
-    const d=new Date(e.inv_date+"T00:00:00"), K=KINDS[e.kind], sign=e.kind==="sale"?"+":"−";
-    const title=e.category||K.label, sub=[e.party,e.ref_no?("#"+e.ref_no):"",e.payment].filter(Boolean).map(esc).join(" · ");
+    const d=new Date(e.inv_date+"T00:00:00"), K=KINDS[e.kind], sign=isIncome(e.kind)?"+":"−";
+    const names=(e.items||[]).map(x=>x.name).filter(Boolean);
+    const title=names.length?(names.slice(0,3).join("، ")+(names.length>3?` +${names.length-3}`:"")):(e.category||K.label), sub=[e.party,e.ref_no?("#"+e.ref_no):"",e.payment].filter(Boolean).map(esc).join(" · ");
     return `<div class="row" data-id="${e.id}" tabindex="0">
       <span class="day">${d.getDate()}<small>${days[d.getDay()]}</small></span>
       <span class="what"><strong>${esc(title)}</strong>
-        <span class="meta"><span class="tag ${e.kind}">${K.prefix}-${e.id}</span>${sub}${(e.images||[]).length?` · 📎${e.images.length}`:""}</span></span>
+        <span class="meta"><span class="tag ${e.kind}">${K.prefix}-${e.id}</span>${names.length&&e.category?esc(e.category)+" · ":""}${sub}${(e.images||[]).length?` · 📎${e.images.length}`:""}</span></span>
       <span class="amt num ${e.kind}">${sign}${fmt(e.amount)}</span>
     </div>`}).join(""):`<div class="empty">لا توجد فواتير${tab!=="all"?" من هذا النوع":""} لهذا الشهر.</div>`;
   document.querySelectorAll(".row").forEach(r=>{const o=()=>edit(r.dataset.id);r.onclick=o;r.onkeydown=ev=>{if(ev.key==="Enter")o()}});
@@ -277,22 +307,53 @@ function render(){
   bars("bP",g("purchase","category"),COLORS.purchase);
   bars("bE",g("expense","category"),COLORS.expense);
   bars("bS",g("sale","payment"),COLORS.sale);
+  bars("bK",g("slaughter","party"),COLORS.slaughter);
+  bars("bKp",g("slaughter","payment"),COLORS.slaughter);
   const credit=entries.filter(e=>e.payment==="آجل").reduce((a,e)=>{const key=`${KINDS[e.kind].label}${e.party?" — "+e.party:""}`;a[key]=(a[key]||0)+ +e.amount;return a},{});
   bars("bC",credit,"var(--ink)");
+  const agg={}; entries.forEach(e=>(e.items||[]).forEach(x=>{if(!x.name)return;const k=e.kind+"|"+x.name;agg[k]=agg[k]||{kind:e.kind,name:x.name,qty:0,total:0};agg[k].qty+= +x.qty||0;agg[k].total+= +x.total||0}));
+  const rowsI=Object.values(agg).sort((a,b)=>b.total-a.total);
+  $("bI").innerHTML=rowsI.length?`<div style="display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;font-size:.84rem">${rowsI.map(r=>`<span><span class="tag ${r.kind}">${KINDS[r.kind].label}</span> ${esc(r.name)}</span><span class="num" style="color:var(--muted)">× ${+r.qty.toFixed(2)}</span><b class="n">${fmt(r.total)}</b>`).join("")}</div>`:`<div style="color:var(--muted);font-size:.84rem">لا يوجد</div>`;
 }
 
 function setKind(k){
   kind=k; document.querySelectorAll(".kinds button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
-  $("partyLabel").textContent=KINDS[k].party;
+  $("partyLabel").textContent=KINDS[k].party+(k==="slaughter"?" *":"");
+  $("party").required=(k==="slaughter"); $("party").placeholder=k==="slaughter"?"مطلوب":"اختياري";
   $("cats").innerHTML=KINDS[k].cats.map(c=>`<option value="${c}">`).join("");
 }
 document.querySelectorAll(".kinds button").forEach(b=>b.onclick=()=>setKind(b.dataset.k));
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));render()});
 $("q").oninput=render;
 
+const blankItem=()=>({name:"",qty:1,price:""});
+const lineTotal=it=>(+it.qty||0)*(+it.price||0);
+function itemsTotal(){return items.reduce((s,it)=>s+lineTotal(it),0)}
+function syncAmount(){
+  const used=items.some(it=>it.name.trim()||+it.price);
+  $("itemsSum").textContent=fmt(itemsTotal());
+  $("amount").readOnly=used;
+  if(used) $("amount").value=itemsTotal().toFixed(2);
+}
+function drawItems(){
+  $("itemRows").innerHTML=items.map((it,i)=>`<div class="ir">
+    <input type="text" data-i="${i}" data-f="name" value="${esc(it.name)}" placeholder="مثال: لحم غنم" aria-label="الصنف">
+    <input type="number" data-i="${i}" data-f="qty" value="${it.qty}" step="any" min="0" inputmode="decimal" aria-label="الكمية">
+    <input type="number" data-i="${i}" data-f="price" value="${it.price}" step="0.01" min="0" inputmode="decimal" placeholder="0.00" aria-label="السعر">
+    <span class="lt" id="lt${i}">${fmt(lineTotal(it))}</span>
+    <button type="button" class="x" data-x="${i}" aria-label="حذف الصنف">×</button></div>`).join("");
+  $("itemRows").querySelectorAll("input").forEach(inp=>inp.oninput=()=>{
+    const i=+inp.dataset.i; items[i][inp.dataset.f]=inp.value;
+    $("lt"+i).textContent=fmt(lineTotal(items[i])); syncAmount();
+  });
+  $("itemRows").querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{items.splice(+b.dataset.x,1); if(!items.length) items.push(blankItem()); drawItems()});
+  syncAmount();
+}
+$("addRow").onclick=()=>{items.push(blankItem()); drawItems(); const r=$("itemRows").lastElementChild; r&&r.querySelector("input").focus()};
+
 function resetForm(){
   editingId=null; const k=kind; $("f").reset(); setKind(k); $("date").value=iso(new Date());
-  photos=[]; removed=[]; drawThumbs();
+  photos=[]; removed=[]; drawThumbs(); items=[blankItem()]; drawItems();
   $("formTitle").textContent="تسجيل فاتورة"; $("saveBtn").textContent="حفظ الفاتورة"; $("delBtn").hidden=true;
 }
 
@@ -302,6 +363,8 @@ function edit(id){
   $("date").value=e.inv_date; $("ref").value=e.ref_no||""; $("party").value=e.party||""; $("cat").value=e.category||"";
   $("amount").value=e.amount; $("pay").value=e.payment||"كاش"; $("vat").checked=(+e.vat||0)>0; $("note").value=e.note||"";
   photos=(e.images||[]).map(url=>({url})); removed=[]; drawThumbs();
+  items=(e.items&&e.items.length)?e.items.map(x=>({name:x.name||"",qty:x.qty,price:x.price})):[blankItem()]; drawItems();
+  $("amount").value=e.amount;
   $("formTitle").textContent=`تعديل ${KINDS[e.kind].prefix}-${e.id}`; $("saveBtn").textContent="حفظ التعديل"; $("delBtn").hidden=false;
   $("f").scrollIntoView({behavior:"smooth"});
 }
@@ -321,9 +384,11 @@ $("f").onsubmit=async ev=>{
       } else urls.push(p.url);
     }
     if(db&&removed.length){const paths=removed.map(u=>u.split(`/${BUCKET}/`)[1]).filter(Boolean);if(paths.length)await db.storage.from(BUCKET).remove(paths)}
-    const amount=+$("amount").value;
+    const cleanItems=items.filter(it=>it.name.trim()||+it.price).map(it=>({name:it.name.trim(),qty:+it.qty||0,price:+it.price||0,total:Math.round(lineTotal(it)*100)/100}));
+    const amount=cleanItems.length?Math.round(itemsTotal()*100)/100:+$("amount").value;
+    if(!(amount>0)){toast("أدخل الأصناف أو المبلغ");return}
     const rec={kind,inv_date:$("date").value,ref_no:$("ref").value.trim(),party:$("party").value.trim(),category:$("cat").value.trim(),
-      amount,payment:$("pay").value,vat:$("vat").checked?Math.round(amount*5/105*100)/100:0,note:$("note").value.trim(),images:urls};
+      amount,payment:$("pay").value,vat:$("vat").checked?Math.round(amount*5/105*100)/100:0,note:$("note").value.trim(),images:urls,items:cleanItems};
     if(db){
       const {error}=editingId?await db.from(TABLE).update(rec).eq("id",editingId):await db.from(TABLE).insert(rec);
       if(error){toast("لم يتم الحفظ: "+error.message);return}
@@ -362,6 +427,7 @@ $("waBtn").onclick=()=>{
   const count=k=>entries.filter(e=>e.kind===k).length;
   const msg=`*تقرير الحسابات — ${months[viewM]} ${viewY}*\n\n`+
     `*المبيعات:* ${fmt(t.sale)} درهم (${count("sale")} فاتورة)\n\n`+
+    `*الذبائح:* ${fmt(t.slaughter)} درهم (${count("slaughter")} ذبيحة/فاتورة)\n${entries.filter(e=>e.kind==="slaughter").map(e=>`• ${e.party||"—"} | ${e.category||""} | ${e.payment} | ${fmt(e.amount)}`).join("\n")||"• لا يوجد"}\n\n`+
     `*المشتريات:* ${fmt(t.purchase)} درهم (${count("purchase")} فاتورة)\n${group("purchase")}\n\n`+
     `*المصروفات:* ${fmt(t.expense)} درهم (${count("expense")} فاتورة)\n${group("expense")}\n\n`+
     `————————\n*صافي الربح: ${(t.net>0?"+":"")+fmt(t.net)} درهم*`+
